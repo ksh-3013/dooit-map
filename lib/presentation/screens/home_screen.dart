@@ -1,3 +1,5 @@
+import 'package:dooit/data/modles/times.dart';
+import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,6 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  UserRepository userRepository = UserRepository();
+
   void handleTap(int index) {
     switch (index) {
       case 0:
@@ -23,6 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
         // _launchURL(url2);
         break;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userRepository.getTime();
   }
 
   @override
@@ -85,7 +95,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Image.asset('assets/images/timer_bg.png', width: 350, height: 350),
+            Stack(
+              children: [
+                Image.asset(
+                  'assets/images/timer_bg.png',
+                  width: 350,
+                  height: 350,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text(times.daily)],
+                ),
+              ],
+            ),
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

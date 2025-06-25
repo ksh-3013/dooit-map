@@ -5,18 +5,58 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/ip.dart';
 
 class UserRepository {
+  Future<void> userInfo() async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString('accessToken');
+      String? email = pref.getString('email');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        print('⚠️ accessToken이 없습니다');
+        return;
+      }
+
+      print('🔐 accessToken: $accessToken');
+
+      final body = {
+        "email": email ?? '',
+        "nick_name": "string",
+        "gym_name": "string",
+        "gym_address": "string",
+        "latitude": 0.1,
+        "longitude": 0.1,
+      };
+
+      final response = await http.post(
+        Uri.parse('$url/user/info'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(body),
+      );
+
+      print('📡 서버 응답 상태: ${response.statusCode}');
+      print('📦 응답 본문: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('✅ 사용자 정보 전송 성공');
+        getTime(); // 시간 정보 요청 함수
+      } else {
+        print('❌ 사용자 정보 전송 실패 (status: ${response.statusCode})');
+      }
+    } catch (e, stackTrace) {
+      print('🔥 예외 발생: $e');
+      print('🧱 스택트레이스: $stackTrace');
+    }
+  }
+
   Future<void> getTime() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? accessToken = pref.getString('accessToken');
 
-    if (accessToken == null || accessToken.isEmpty) {
-      print('⚠️ accessToken이 없습니다. $accessToken');
-      return;
-    }
-    print('$accessToken');
-
     final response = await http.get(
-      Uri.parse('$url/exer/time'),
+      Uri.parse('$url/api/exer/time'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 

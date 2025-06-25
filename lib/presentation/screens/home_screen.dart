@@ -2,7 +2,6 @@ import 'package:dooit/data/modles/times.dart';
 import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../components/custom_swiper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,7 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    userRepository.getTime();
+    userRepository.userInfo();
+    // userRepository.getTime();
   }
 
   @override

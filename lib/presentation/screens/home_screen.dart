@@ -1,5 +1,7 @@
 import 'package:dooit/data/modles/times.dart';
 import 'package:dooit/data/repositories/user_repository.dart';
+import 'package:dooit/presentation/screens/alarm_screen.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/custom_swiper.dart';
@@ -91,7 +93,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  Icon(Icons.notifications, color: Colors.grey, size: 30),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  AlarmScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                const begin = Offset(1, 0);
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
+                                var tween = Tween(
+                                  begin: begin,
+                                  end: end,
+                                ).chain(CurveTween(curve: curve));
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.notifications,
+                      color: Colors.grey,
+                      size: 30,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -154,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/images/fire.png',
+                          'assets/images/biceps.png',
                           width: 35,
                           height: 35,
                         ),
@@ -176,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 25),
             CustomSwiper(
-              items: List.generate(3, (index) {
+              items: List.generate(4, (index) {
                 return Image.asset(
                   'assets/images/banner${index + 1}.png',
                   fit: BoxFit.cover,
@@ -197,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '이번 주 공부 시간',
+                        '이번 주 운동 시간',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 17,
@@ -215,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        '이번 주 공부 기록이 없어요😫',
+                        '이번 주 운동 기록이 없어요😫',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 15,
@@ -239,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '공부 분석 보기',
+                              '운동 분석 보기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -259,6 +290,219 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      dashPattern: [7, 5],
+                      strokeWidth: 1.3,
+                      radius: Radius.circular(20),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      width: 40,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('월'),
+                  Text('화'),
+                  Text('수'),
+                  Text('목'),
+                  Text('금'),
+                  Text('토'),
+                  Text('일'),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('23'),
+                  Text('24'),
+                  Text('25'),
+                  Text('26'),
+                  Text('27'),
+                  Text('28'),
+                  Text('29'),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                width: double.infinity,
+                height: 90,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Image.asset(
+                      'assets/images/chart.png',
+                      width: 30,
+                      height: 30,
+                    ),
+                    SizedBox(width: 5),
+                    Text('하루 평균 운동 시간'),
+                    Spacer(),
+                    Text(
+                      '운동 기록이 없어요',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                width: double.infinity,
+                height: 90,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Image.asset(
+                      'assets/images/fire.png',
+                      width: 30,
+                      height: 30,
+                    ),
+                    SizedBox(width: 5),
+                    Text('하루 최대 운동 시간'),
+                    Spacer(),
+                    Text(
+                      '운동 기록이 없어요',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(height: 50),
           ],
         ),
@@ -266,3 +510,126 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// onTap: () {
+// showModalBottomSheet(
+// context: context,
+// barrierColor: Colors.black.withOpacity(0.4),
+// isScrollControlled: true,
+// backgroundColor: Colors.white,
+// builder: (context) {
+// return StatefulBuilder(
+// builder: (context, setState) {
+// return Column(
+// mainAxisSize: MainAxisSize.min,
+// children: [
+// SizedBox(height: 20),
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 20,
+// ),
+// child: Row(
+// children: [
+// Text(
+// '알림',
+// style: TextStyle(
+// color: Colors.black,
+// fontSize: 25,
+// fontFamily: 'Pretendard',
+// fontWeight: FontWeight.w700,
+// ),
+// ),
+// Spacer(),
+// GestureDetector(
+// onTap: () {
+// Navigator.pop(context);
+// },
+// child: Icon(
+// Icons.cancel_outlined,
+// size: 30,
+// ),
+// ),
+// ],
+// ),
+// ),
+// SizedBox(height: 20),
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 20,
+// ),
+// child: Container(
+// width: double.infinity,
+// height: 55,
+// color: Colors.grey.shade50,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 10,
+// ),
+// child: Row(
+// children: [Text('오늘 최고 기록: 300분')],
+// ),
+// ),
+// ),
+// ),
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 20,
+// ),
+// child: Container(
+// width: double.infinity,
+// height: 55,
+// color: Colors.grey.shade50,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 10,
+// ),
+// child: Row(
+// children: [Text('오늘 최고 기록: 300분')],
+// ),
+// ),
+// ),
+// ),
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 20,
+// ),
+// child: Container(
+// width: double.infinity,
+// height: 55,
+// color: Colors.grey.shade50,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 10,
+// ),
+// child: Row(
+// children: [Text('오늘 최고 기록: 300분')],
+// ),
+// ),
+// ),
+// ),
+// Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 20,
+// ),
+// child: Container(
+// width: double.infinity,
+// height: 55,
+// color: Colors.grey.shade50,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(
+// horizontal: 10,
+// ),
+// child: Row(
+// children: [Text('오늘 최고 기록: 300분')],
+// ),
+// ),
+// ),
+// ),
+// SizedBox(height: 40),
+// ],
+// );
+// },
+// );
+// },
+// );
+// },

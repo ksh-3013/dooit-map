@@ -84,7 +84,7 @@ class AuthRepository {
     try {
       final body = {'access_token': accessToken};
       final response = await http.post(
-        Uri.parse('$url/api/auth/logout'),
+        Uri.parse('$url/api/auth/logOut'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../common/colors.dart';
+import '../../core/colors.dart';
 import '../../data/repositories/auth_repository.dart';
 
 class SignInScreen extends StatefulWidget {

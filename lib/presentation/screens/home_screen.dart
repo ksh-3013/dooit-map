@@ -1,4 +1,4 @@
-import 'package:dooit/data/modles/times.dart';
+import 'package:dooit/data/modles/user_data.dart';
 import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:dooit/presentation/screens/alarm_screen.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -33,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    userRepository.userInfo();
+    setState(() {
+      userRepository.userInfo();
+    });
     // userRepository.getTime();
   }
 
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text(times.daily)],
+                  children: [Text(userData.name.toString())],
                 ),
               ],
             ),

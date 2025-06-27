@@ -5,7 +5,6 @@ import 'package:dooit/presentation/screens/alarm_screen.dart';
 import 'package:dooit/presentation/screens/exercise_analysis_screen.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../components/custom_swiper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -166,7 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 350,
               child: Stack(
                 children: [
-                  Image.asset('assets/images/timer_bg.png'),
+                  Image.asset(
+                    'assets/images/timer_bg.png',
+                    color: Colors.green,
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -256,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
               height: 100,
               autoPlay: true,
-              autoPlayInterval: Duration(seconds: 3),
+              autoPlayInterval: Duration(seconds: 5),
               onTap: (index) => handleTap(index),
             ),
             SizedBox(height: 20),
@@ -393,34 +395,53 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text('월'),
-                  Text('화'),
-                  Text('수'),
-                  Text('목'),
-                  Text('금'),
-                  Text('토'),
-                  Text('일'),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(7, (index) {
+                final workDateStr = data.weekStats[index]['work_date'];
+                if (workDateStr == null) return const Text('-');
+
+                final workDate = DateTime.parse(workDateStr);
+                const weekdayNames = ['월', '화', '수', '목', '금', '토', '일'];
+
+                // DateTime weekday는 1(월) ~ 7(일)
+                final weekday = weekdayNames[workDate.weekday - 1];
+
+                return Text(
+                  weekday,
+                  style: TextStyle(
+                    fontWeight: (workDateStr == data.daily)
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: (workDateStr == data.daily)
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                );
+              }),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text('23'),
-                  Text('24'),
-                  Text('25'),
-                  Text('26'),
-                  Text('27'),
-                  Text('28'),
-                  Text('29'),
-                ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(7, (index) {
+                  final dayData = data.weekStats[index];
+                  final workDateStr = dayData['work_date']; // 예: '2025-06-29'
+                  final todayStr = data.daily; // 예: '2025-06-29'
+
+                  if (workDateStr == null) return const Text('-');
+
+                  final workDate = DateTime.parse(workDateStr);
+                  final isToday = (todayStr != null && workDateStr == todayStr);
+
+                  return Text(
+                    '${workDate.day}',
+                    style: TextStyle(
+                      fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                      color: isToday ? Colors.black : Colors.grey,
+                    ),
+                  );
+                }),
               ),
             ),
             SizedBox(height: 20),

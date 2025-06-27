@@ -60,9 +60,8 @@ class AuthRepository {
 
       if (response.statusCode == 200) {
         print('✅ 서버에 토큰 전송 성공: ${response.body}');
-        final responseData = jsonDecode(response.body);
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('token', responseData['access_token']);
+        // final responseData = jsonDecode(response.body);
+        // pref.setString('token', responseData['access_token']);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),

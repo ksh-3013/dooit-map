@@ -1,33 +1,77 @@
 import 'dart:convert';
-import 'package:dooit/core/token_storage.dart';
-import 'package:dooit/data/modles/user_data.dart';
-import 'package:flutter/material.dart';
+import 'package:dooit/data/modles/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/ip.dart';
+
+UserRepository userRepository = UserRepository();
 
 class UserRepository {
   Future<void> userInfo() async {
+    print('화면 갱신 호출됨');
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final tkn = pref.getString('tkn');
-    try {
-      final response = await http.get(
-        Uri.parse('$url/api/user/info'),
-        headers: {'Authorization': 'Bearer ${tkn}'},
-      );
+    final accessToken = pref.getString('access_token');
+    final refreshToken = pref.getString('refresh_token');
+    final response = await http.get(
+      Uri.parse('$url/api/user/info'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        userData.name = data['name'];
-        userData.tier = data['tier'];
-      } else {
-        print('⛔️ 서버 응답 오류: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('❌ 네트워크/파싱 오류: $e');
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      data.name = responseData['data']['name'];
+      data.tier = responseData['data']['tier'];
+      data.totalPoint = responseData['data']['totalPoint'];
+      data.totalExerTime = responseData['data']['totalExerTime'];
+    } else {
+      print('⛔️ 서버 응답 오류: ${response.statusCode}');
     }
   }
 
-  Future<void> setUsername() async {}
+  Future<void> getTime() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final accessToken = await pref.getString('access_token');
+    final response = await http.get(
+      Uri.parse('$url/api/exer/time'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+
+      data.today = responseData['data']['today']['time'];
+      data.total = responseData['data']['total']['time'];
+      data.todayStat_time = responseData['data']['today_stat']['time'];
+      data.todayStat_avgTime = responseData['data']['today_stat']['avg_time'];
+      data.weekStat_time = responseData['data']['week_stat']['time'];
+      data.weekStat_avgTime = responseData['data']['week_stat']['avg_time'];
+      data.monthStat_time = responseData['data']['month_stat']['time'];
+      data.monthStat_avgTime = responseData['data']['month_stat']['avg_time'];
+      data.weekStats = List<Map<String, dynamic>>.from(
+        responseData['data']['week_stats'],
+      );
+      data.daily = responseData['data']['daily'];
+    }
+    print(data.weekStats[1]);
+    print('${data.weekStats}');
+  }
+
+  Future<void> getRank() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final accessToken = pref.getString('access_token');
+    final refreshToken = pref.getString('refresh_token');
+    final response = await http.get(
+      Uri.parse('$url/api/rank'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      data.challengeSuccessRanks =
+          responseData['data']['challengeSuccessRanks'];
+      data.havePointRanks = responseData['data']['havePointRanks'];
+      data.monthExerTimeRanks = responseData['data']['monthExerTimeRanks'];
+      data.weekExerTimeRanks = responseData['data']['weekExerTimeRanks'];
+      data.dailyExerTimeRanks = responseData['data']['dailyExerTimeRanks'];
+    }
+  }
 }

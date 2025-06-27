@@ -1,6 +1,8 @@
-import 'package:dooit/data/modles/user_data.dart';
+import 'package:dooit/core/colors.dart';
+import 'package:dooit/data/modles/data.dart';
 import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:dooit/presentation/screens/alarm_screen.dart';
+import 'package:dooit/presentation/screens/exercise_analysis_screen.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,13 +32,43 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Color getGradientColor(int duration, {int maxDuration = 7200}) {
+    final ratio = (duration / maxDuration).clamp(0.0, 1.0);
+
+    return Color.lerp(Colors.white, Colors.blue.shade800, ratio)!;
+  }
+
+  String formatMinutes(int minutes) {
+    final hours = minutes ~/ 60;
+    final mins = minutes % 60;
+    final formatted = '${hours}h ${mins.toString().padLeft(2, '0')}m';
+    return formatted;
+  }
+
+  String getWeeklyExerciseMessage(int minutes) {
+    if (minutes <= 0) {
+      return '이번 주 운동 기록이 없어요 😫';
+    } else if (minutes < 60) {
+      return '이번 주는 거의 안 움직였어요';
+    } else if (minutes < 180) {
+      return '그래도 몸 좀 풀긴 했네요! 👍';
+    } else if (minutes < 360) {
+      return '운동 습관 들이기 좋아요!';
+    } else if (minutes < 600) {
+      return '와! 운동 루틴이 잡혀가고 있어요! 🔥';
+    } else {
+      return '프로 운동러 멋져요~! 🏆';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
+      userRepository.getRank();
       userRepository.userInfo();
+      userRepository.getTime();
     });
-    // userRepository.getTime();
   }
 
   @override
@@ -46,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 15),
+            SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
@@ -128,18 +160,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Stack(
-              children: [
-                Image.asset(
-                  'assets/images/timer_bg.png',
-                  width: 350,
-                  height: 350,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text(userData.name.toString())],
-                ),
-              ],
+            SizedBox(height: 10),
+            SizedBox(
+              width: 350,
+              height: 350,
+              child: Stack(
+                children: [
+                  Image.asset('assets/images/timer_bg.png'),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Text(
+                      // '${data.}',
+                      // style: TextStyle(color: Colors.black),
+                      // ),
+                      Row(children: []),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 25),
             Padding(
@@ -148,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 190,
+                    width: 180,
                     height: 65,
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -158,18 +197,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/images/calendar.png',
+                          'assets/images/pin.png',
                           width: 35,
                           height: 35,
                         ),
                         SizedBox(width: 5),
                         Text(
-                          'Check-in',
+                          '헬스장 찾기',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -177,10 +216,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(width: 10),
                   Container(
-                    width: 190,
+                    width: 180,
                     height: 65,
                     decoration: BoxDecoration(
-                      color: Color(0xff5D29CC),
+                      color: Colors.grey.shade500,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Row(
@@ -193,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          '입실하기',
+                          'Check-in',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -209,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 25),
             CustomSwiper(
-              items: List.generate(4, (index) {
+              items: List.generate(5, (index) {
                 return Image.asset(
                   'assets/images/banner${index + 1}.png',
                   fit: BoxFit.cover,
@@ -233,58 +272,70 @@ class _HomeScreenState extends State<HomeScreen> {
                         '이번 주 운동 시간',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 17,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        '00m 00s',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 43,
+                          fontSize: 18,
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        '이번 주 운동 기록이 없어요😫',
+                        formatMinutes(data.weekStat_time ?? 0),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 43,
+                          fontFamily: 'HSSanTokki',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        getWeeklyExerciseMessage(data.weekStat_time!),
                         style: TextStyle(
                           color: Colors.grey,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontFamily: 'Prendard',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                   Column(
                     children: [
-                      SizedBox(height: 55),
-                      Container(
-                        width: 150,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(200),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '운동 분석 보기',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
+                      SizedBox(height: 60),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      ExerciseAnalysisScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 135,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(200),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '운동 분석 보기',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
-                            ),
-                          ],
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -294,116 +345,51 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  DottedBorder(
-                    options: RoundedRectDottedBorderOptions(
-                      dashPattern: [7, 5],
-                      strokeWidth: 1.3,
-                      radius: Radius.circular(20),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      width: 40,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(7, (index) {
+                  final dayData = data.weekStats[index];
+                  final duration = dayData['duration'] ?? 0;
+                  final maxHeight = 120.0;
+                  final maxDuration = 3600;
+                  final barHeight = ((duration / maxDuration) * maxHeight)
+                      .clamp(0, maxHeight);
+
+                  return duration != 0
+                      ? Container(
+                          width: 40,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: 40,
+                            height: barHeight,
+                            decoration: BoxDecoration(
+                              color: getGradientColor(duration),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        )
+                      : DottedBorder(
+                          options: RoundedRectDottedBorderOptions(
+                            dashPattern: [7, 5],
+                            strokeWidth: 1.3,
+                            radius: Radius.circular(20),
+                            padding: EdgeInsets.zero,
+                          ),
+                          child: Container(
+                            width: 40,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        );
+                }),
               ),
             ),
             SizedBox(height: 10),
@@ -456,17 +442,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 30,
                     ),
                     SizedBox(width: 5),
-                    Text('하루 평균 운동 시간'),
+                    Text(
+                      '이번 주 평균 운동 시간',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     Spacer(),
                     Text(
-                      '운동 기록이 없어요',
+                      data.todayStat_avgTime != null
+                          ? '${formatMinutes(data.todayStat_avgTime!)}'
+                          : '운동 기록이 없어요',
                       style: TextStyle(
                         color: Colors.grey,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 30),
                   ],
                 ),
               ),
@@ -490,17 +486,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 30,
                     ),
                     SizedBox(width: 5),
-                    Text('하루 최대 운동 시간'),
+                    Text(
+                      '이번 주 최대 운동 시간',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     Spacer(),
                     Text(
-                      '운동 기록이 없어요',
+                      data.todayStat_avgTime != null
+                          ? '${formatMinutes(data.todayStat_avgTime!)}'
+                          : '운동 기록이 없어요',
                       style: TextStyle(
                         color: Colors.grey,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 30),
                   ],
                 ),
               ),

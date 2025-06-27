@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:dooit/presentation/screens/main_screen.dart';
 import 'package:dooit/presentation/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/ip.dart';
 
 class AuthRepository {
@@ -25,11 +25,9 @@ class AuthRepository {
       }
 
       final tokenManager = TokenManagerProvider.instance.manager;
-      final token = await tokenManager.getToken();
-      final accessToken = token!.accessToken;
-      final refreshToken = token.refreshToken;
-      pref.setString('accessToken', accessToken!);
-      pref.setString('refreshToken', refreshToken!);
+      final kakaoToken = await tokenManager.getToken();
+      final kakaoAccessToken = kakaoToken!.accessToken;
+      pref.setString('kakaoAccessToken', kakaoAccessToken);
       await sendTokenToServer(context);
     } catch (error) {
       print('로그인에 실패하였습니다 -> $error');
@@ -40,10 +38,11 @@ class AuthRepository {
     }
   }
 
+  /// 서버에 토큰 전송
   Future<void> sendTokenToServer(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final accessToken = pref.getString('accessToken');
-    if (accessToken == null || accessToken.isEmpty) {
+    final kakaoAccessToken = pref.getString('kakaoAccessToken');
+    if (kakaoAccessToken == null || kakaoAccessToken.isEmpty) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SignInScreen()),
@@ -51,7 +50,7 @@ class AuthRepository {
       return;
     }
     try {
-      final body = {'access_token': accessToken, 'provider': 'kakao'};
+      final body = {'access_token': kakaoAccessToken, 'provider': 'kakao'};
       final response = await http.post(
         Uri.parse('$url/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
@@ -60,8 +59,12 @@ class AuthRepository {
 
       if (response.statusCode == 200) {
         print('✅ 서버에 토큰 전송 성공: ${response.body}');
-        // final responseData = jsonDecode(response.body);
-        // pref.setString('token', responseData['access_token']);
+        final responseData = jsonDecode(response.body);
+        pref.setString('access_token', responseData['data']['access_token']);
+        pref.setString('refresh_token', responseData['data']['refresh_token']);
+        userRepository.userInfo();
+        await userRepository.getRank();
+        await userRepository.getTime();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
@@ -82,24 +85,28 @@ class AuthRepository {
     }
   }
 
+  /// 로그아웃
   Future<void> logOut(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    final refreshToken = pref.getString('refreshToken');
-    final accessToken = pref.getString('accessToken');
+    final accessToken = pref.getString('access_token');
+    final refreshToken = pref.getString('refresh_token');
     try {
       final body = {'refresh_token': refreshToken};
       print(refreshToken);
       print(accessToken);
       final response = await http.post(
         Uri.parse('$url/api/auth/logout'),
-        headers: {'Content-Type': 'application/json', 'Authorization': ''},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $refreshToken',
+        },
         body: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {
         print('✅ 서버에 토큰 전송 성공: ${response.body}');
-        await pref.remove('refreshToken');
-        await pref.remove('accessToken');
+        await pref.remove('refresh_token');
+        await pref.remove('access_token');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => SignInScreen()),

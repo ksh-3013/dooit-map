@@ -1,6 +1,8 @@
 import 'package:dooit/data/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/colors.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -25,7 +27,15 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png', width: 200, height: 200),
+            Text(
+              'Dooit',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 40,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w900,
+              ),
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dooit/data/models/user_model.dart';
 import '../../core/ip.dart';
 import '../models/data.dart';
 
@@ -80,5 +81,61 @@ class UserRepository {
     }
   }
 
+  Future<UserModel?> getMyData() async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      final tkn = pref.getString('access_token');
+
+      final response = await http.get(
+        Uri.parse('${url}/user/info'),
+        headers: {
+          'Authorization' : 'Bearer $tkn',
+        }
+      );
+
+      final jsonBody = await jsonDecode(response.body);
+      if(response.statusCode >= 200 && response.statusCode < 300) {
+        // print(jsonBody['data']);
+        final myData = UserModel.fromJson(jsonBody['data']);
+        print('내 정보 가져오기 성공!');
+        return myData;
+      }
+
+      print('내 정보 가져오기 실패: ${response.statusCode} ${jsonBody}');
+      return null;
+
+    } catch(e) {
+      print('내 정보 가져오기 에러다: $e');
+      return null;
+    }
+  }
+
+  Future<String>changeUserName(String name) async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      final tkn = pref.getString('access_token');
+      
+      final response = await http.post(
+          Uri.parse('${url}/user/name').replace(queryParameters: {'newName' : name}),
+          headers: {
+            'Authorization' : 'Bearer $tkn',
+          }
+      );
+
+      final jsonBody = await jsonDecode(response.body);
+      if(response.statusCode >= 200 && response.statusCode < 300) {
+        // print(jsonBody['data']);
+        print(jsonBody['message']);
+        return jsonBody['message'];
+      }
+
+      print(jsonBody['message']);
+      return jsonBody['message'];
+
+    } catch(e) {
+      print('이름 바꾸기 에러다: $e');
+      return '';
+    }
+  }
 
 }

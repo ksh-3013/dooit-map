@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:dooit/data/models/challenge/challenge_model.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/ip.dart';
 import '../models/challenge/challenge_list_model.dart';
 
 class ChallengeRepository {
   final client = Client();
-  final url = 'https://be-production-e1c4.up.railway.app/api';
-  final tkn =
-      'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyMDA4aml3b29AZ21haWwuY29tIiwiaWF0IjoxNzUwODMzNzk1LCJleHAiOjE3NTM0MjU3OTV9.LT074XP9OQulHd9FSw35DQSXPA7pccXKw27gJhJp7v7CFSglL66hXyqLvAdoyVGs';
+  String? tkn;
 
   Future<ChallengeListModel?> getChallengeList(
     String type,
@@ -17,6 +17,9 @@ class ChallengeRepository {
     String sort,
   ) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      tkn = pref.getString('access_token');
+
       final queryParams = {
         'type': type,
         'keyword': keyword,
@@ -57,6 +60,9 @@ class ChallengeRepository {
     String end,
   ) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      tkn = pref.getString('access_token');
+
       final body = {
         "challenge_title": title,
         "challenge_description": description,
@@ -91,6 +97,9 @@ class ChallengeRepository {
 
   Future<ChallengeModel?> getChallenge(int id) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      tkn = pref.getString('access_token');
+
       final response = await client.get(
         Uri.parse('${url}/challenges/$id'),
         headers: {'Authorization': 'Bearer ${tkn}'},
@@ -115,6 +124,9 @@ class ChallengeRepository {
 
   Future<String> joinChallenge(int id) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      tkn = pref.getString('access_token');
+
       final response = await client.post(
         Uri.parse('${url}/challenges/$id/join'),
         headers: {'Authorization': 'Bearer ${tkn}'},
@@ -136,6 +148,9 @@ class ChallengeRepository {
 
   Future<int?> getMyChallengeId() async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      tkn = pref.getString('access_token');
+      
       final response = await client.get(
         Uri.parse('${url}/challenges/my'),
         headers: {'Authorization': 'Bearer ${tkn}'},

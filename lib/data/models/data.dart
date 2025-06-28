@@ -29,4 +29,6 @@ class Data {
   List<Map<String, dynamic>> weekStats = [];
 
   String? daily;
+  int? weeklyDailyAverageWorkoutDuration;
+  int? weeklyMaxWorkoutDuration;
 }

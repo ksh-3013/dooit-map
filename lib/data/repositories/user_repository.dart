@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:dooit/data/modles/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/ip.dart';
+import '../models/data.dart';
 
 UserRepository userRepository = UserRepository();
 
@@ -23,6 +23,7 @@ class UserRepository {
       data.tier = responseData['data']['tier'];
       data.totalPoint = responseData['data']['totalPoint'];
       data.totalExerTime = responseData['data']['totalExerTime'];
+      print(responseData);
     } else {
       print('⛔️ 서버 응답 오류: ${response.statusCode}');
     }
@@ -50,9 +51,13 @@ class UserRepository {
         responseData['data']['week_stats'],
       );
       data.daily = responseData['data']['daily'];
+      data.weeklyDailyAverageWorkoutDuration =
+          responseData['data']['weekly_daily_average_workout_duration'];
+      data.weeklyMaxWorkoutDuration =
+          responseData['data']['weekly_max_workout_duration'];
     }
-    print(data.weekStats[1]);
-    print('${data.weekStats}');
+    print(data.weeklyDailyAverageWorkoutDuration);
+    print('${data.weeklyMaxWorkoutDuration}');
   }
 
   Future<void> getRank() async {

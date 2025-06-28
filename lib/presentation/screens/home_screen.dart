@@ -1,6 +1,8 @@
 import 'package:dooit/core/colors.dart';
-import 'package:dooit/data/modles/data.dart';
+import 'package:dooit/data/models/data.dart';
+import 'package:dooit/data/repositories/alarm_repository.dart';
 import 'package:dooit/data/repositories/user_repository.dart';
+import 'package:dooit/presentation/providers/check_provider.dart';
 import 'package:dooit/presentation/screens/alarm_screen.dart';
 import 'package:dooit/presentation/screens/exercise_analysis_screen.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -16,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserRepository userRepository = UserRepository();
+  AlarmRepository alarmRepository = AlarmRepository();
+  CheckProvider checkProvider = CheckProvider();
 
   void handleTap(int index) {
     switch (index) {
@@ -64,9 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     setState(() {
-      userRepository.getRank();
-      userRepository.userInfo();
-      userRepository.getTime();
+      userRepository
+        ..getRank()
+        ..userInfo()
+        ..getTime();
+      alarmRepository.getAlarm();
     });
   }
 
@@ -106,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          '0',
+                          '${data.totalPoint ?? 0}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
@@ -474,8 +480,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Spacer(),
                     Text(
-                      data.todayStat_avgTime != null
-                          ? '${formatMinutes(data.todayStat_avgTime!)}'
+                      data.weeklyDailyAverageWorkoutDuration != null
+                          ? formatMinutes(
+                              data.weeklyDailyAverageWorkoutDuration!,
+                            )
                           : '운동 기록이 없어요',
                       style: TextStyle(
                         color: Colors.grey,
@@ -518,8 +526,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Spacer(),
                     Text(
-                      data.todayStat_avgTime != null
-                          ? '${formatMinutes(data.todayStat_avgTime!)}'
+                      data.weeklyMaxWorkoutDuration != null
+                          ? formatMinutes(data.weeklyMaxWorkoutDuration!)
                           : '운동 기록이 없어요',
                       style: TextStyle(
                         color: Colors.grey,
@@ -539,126 +547,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// onTap: () {
-// showModalBottomSheet(
-// context: context,
-// barrierColor: Colors.black.withOpacity(0.4),
-// isScrollControlled: true,
-// backgroundColor: Colors.white,
-// builder: (context) {
-// return StatefulBuilder(
-// builder: (context, setState) {
-// return Column(
-// mainAxisSize: MainAxisSize.min,
-// children: [
-// SizedBox(height: 20),
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 20,
-// ),
-// child: Row(
-// children: [
-// Text(
-// '알림',
-// style: TextStyle(
-// color: Colors.black,
-// fontSize: 25,
-// fontFamily: 'Pretendard',
-// fontWeight: FontWeight.w700,
-// ),
-// ),
-// Spacer(),
-// GestureDetector(
-// onTap: () {
-// Navigator.pop(context);
-// },
-// child: Icon(
-// Icons.cancel_outlined,
-// size: 30,
-// ),
-// ),
-// ],
-// ),
-// ),
-// SizedBox(height: 20),
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 20,
-// ),
-// child: Container(
-// width: double.infinity,
-// height: 55,
-// color: Colors.grey.shade50,
-// child: Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 10,
-// ),
-// child: Row(
-// children: [Text('오늘 최고 기록: 300분')],
-// ),
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 20,
-// ),
-// child: Container(
-// width: double.infinity,
-// height: 55,
-// color: Colors.grey.shade50,
-// child: Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 10,
-// ),
-// child: Row(
-// children: [Text('오늘 최고 기록: 300분')],
-// ),
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 20,
-// ),
-// child: Container(
-// width: double.infinity,
-// height: 55,
-// color: Colors.grey.shade50,
-// child: Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 10,
-// ),
-// child: Row(
-// children: [Text('오늘 최고 기록: 300분')],
-// ),
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 20,
-// ),
-// child: Container(
-// width: double.infinity,
-// height: 55,
-// color: Colors.grey.shade50,
-// child: Padding(
-// padding: const EdgeInsets.symmetric(
-// horizontal: 10,
-// ),
-// child: Row(
-// children: [Text('오늘 최고 기록: 300분')],
-// ),
-// ),
-// ),
-// ),
-// SizedBox(height: 40),
-// ],
-// );
-// },
-// );
-// },
-// );
-// },

@@ -20,7 +20,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(

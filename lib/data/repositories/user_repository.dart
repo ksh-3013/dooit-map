@@ -79,4 +79,6 @@ class UserRepository {
       data.dailyExerTimeRanks = responseData['data']['dailyExerTimeRanks'];
     }
   }
+
+
 }

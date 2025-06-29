@@ -42,41 +42,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 상단
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Text(
-                    'HEATH TALK',
-                    style: blackText(size: 30, color: Colors.black),
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        CupertinoPageRoute(
-                          builder: (context) =>
-                              SearchScreen(searchTarget: '커뮤니티'),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.search_rounded,
-                      size: 30,
-                      color: Color(0xFFA6A6A6),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Icon(Icons.notifications, color: Color(0xFFA6A6A6), size: 30),
-                ],
-              ),
-            ),
+            SizedBox(height: 70),
+            Image.asset('assets/images/challenge_screen_titile.png'),
             Padding(
               padding: EdgeInsets.all(12),
               child: Column(
                 children: [
-                  // 이용공지
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     width: double.infinity,
@@ -140,6 +111,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   for (int i = 0; i < 10; i++)
                     HotTalkItem(
                       postData: PostModel(
+                        authorProfile: 3,
+                        reactionCount: 12,
                         authorId: 13,
                         authorName: '변지우',
                         authorTier: '헬중수',
@@ -233,6 +206,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   for (int i = 0; i < 10; i++)
                     PostItem(
                       postData: PostModel(
+                        reactionCount: 33,
+                        authorProfile: 2,
                         authorId: 13,
                         authorName: '변지우',
                         authorTier: '헬중수',

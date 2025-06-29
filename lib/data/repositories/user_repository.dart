@@ -73,12 +73,14 @@ class UserRepository {
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       data.challengeSuccessRanks =
-          responseData['data']['challengeSuccessRanks'] ?? '0';
-      data.havePointRanks = responseData['data']['havePointRanks'] ?? '0';
+          responseData['data']['challenge_success_ranks'] ?? '0';
+      data.havePointRanks = responseData['data']['have_point_ranks'] ?? '0';
       data.monthExerTimeRanks =
-          responseData['data']['monthExerTimeRanks'] ??  '0';
-      data.weekExerTimeRanks = responseData['data']['weekExerTimeRanks'] ??  '0';
-      data.dailyExerTimeRanks = responseData['data']['dailyExerTimeRanks'] ??  '0';
+          responseData['data']['month_exer_time_ranks'] ?? '0';
+      data.weekExerTimeRanks =
+          responseData['data']['week_exer_time_ranks'] ?? '0';
+      data.dailyExerTimeRanks =
+          responseData['data']['daily_exer_time_ranks'] ?? '0';
     }
   }
 
@@ -114,9 +116,7 @@ class UserRepository {
       final tkn = pref.getString('access_token');
 
       final response = await http.post(
-        Uri.parse(
-          '${url}/user/name',
-        ).replace(queryParameters: {'newName': name}),
+        Uri.parse('${url}/user/name').replace(queryParameters: {'name': name}),
         headers: {'Authorization': 'Bearer $tkn'},
       );
 

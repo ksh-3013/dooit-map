@@ -76,8 +76,9 @@ class AuthRepository {
           MaterialPageRoute(builder: (context) => SignInScreen()),
         );
       }
-    } catch (e) {
+    } catch (e, s) {
       print('💥 토큰 전송 에러: $e');
+      debugPrintStack(stackTrace: s);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SignInScreen()),

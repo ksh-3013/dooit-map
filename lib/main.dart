@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       locale: const Locale('ko', 'KR'),
       supportedLocales: const [
         Locale('en', 'US'),
-        Locale('ko', 'KR'), // 한글 locale 추가
+        Locale('ko', 'KR'),
       ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

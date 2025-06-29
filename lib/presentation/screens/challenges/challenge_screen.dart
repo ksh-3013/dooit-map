@@ -45,39 +45,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
         controller: challengeProvider.scrollController,
         child: Column(
           children: [
-            // 상단
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Text(
-                    'CHALLENGE',
-                    style: blackText(size: 30, color: Colors.black),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF1E7DD),
-                      borderRadius: BorderRadius.circular(200),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/star.png', width: 25,),
-                        SizedBox(width: 2,),
-                        Text('${challengeProvider.point}', style: semiBoldText(size: 16, color: Colors.black),),
-                        Text(' 개', style: semiBoldText(size: 16, color: Color(0xFFA6A6A6)),),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Icon(Icons.notifications, color: Color(0xFFA6A6A6), size: 30),
-                ],
-              ),
+            SizedBox(height: 70),
+            Image.asset(
+              'assets/images/challenge_screen_titile.png',
+              width: 250,
             ),
             SizedBox(height: 12),
             // 캐릭터 및 참여 챌린지
@@ -88,7 +59,9 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
             Container(
               padding: EdgeInsets.all(20),
               width: double.infinity,
-              constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height - 200),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.sizeOf(context).height - 200,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
@@ -99,24 +72,44 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ChallengeTypeBox(type: 'ALL', function: () {
-                        challengeProvider.resetChallenges();
-                        challengeProvider.changeChallengeType('ALL');
-                        challengeProvider.getChallengesData();
-                      }, selectType: challengeProvider.challengeType, height: 30,),
-                      ChallengeTypeBox(type: 'TOTAL', function: () {
-                        challengeProvider.resetChallenges();
-                        challengeProvider.changeChallengeType('TOTAL');
-                        challengeProvider.getChallengesData();
-                      }, selectType: challengeProvider.challengeType, height: 30,),
-                      ChallengeTypeBox(type: 'DAILY', function: () {
-                        challengeProvider.resetChallenges();
-                        challengeProvider.changeChallengeType('DAILY');
-                        challengeProvider.getChallengesData();
-                      }, selectType: challengeProvider.challengeType, height: 30,),
+                      ChallengeTypeBox(
+                        type: 'ALL',
+                        function: () {
+                          challengeProvider.resetChallenges();
+                          challengeProvider.changeChallengeType('ALL');
+                          challengeProvider.getChallengesData();
+                        },
+                        selectType: challengeProvider.challengeType,
+                        height: 30,
+                      ),
+                      ChallengeTypeBox(
+                        type: 'TOTAL',
+                        function: () {
+                          challengeProvider.resetChallenges();
+                          challengeProvider.changeChallengeType('TOTAL');
+                          challengeProvider.getChallengesData();
+                        },
+                        selectType: challengeProvider.challengeType,
+                        height: 30,
+                      ),
+                      ChallengeTypeBox(
+                        type: 'DAILY',
+                        function: () {
+                          challengeProvider.resetChallenges();
+                          challengeProvider.changeChallengeType('DAILY');
+                          challengeProvider.getChallengesData();
+                        },
+                        selectType: challengeProvider.challengeType,
+                        height: 30,
+                      ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(builder: (context) => SearchScreen(searchTarget: '챌린지',),));
+                          Navigator.of(context).push(
+                            CupertinoPageRoute(
+                              builder: (context) =>
+                                  SearchScreen(searchTarget: '챌린지'),
+                            ),
+                          );
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -124,60 +117,84 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                           height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(200),
-                            border: Border.all(width: 1, color: Colors.grey.withValues(alpha: 0.2)),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.grey.withValues(alpha: 0.2),
+                            ),
                             color: Colors.white,
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.search_rounded, size: 15, color: Colors.black,),
-                              Text('검색', style: mediumText(
-                                size: 11,
+                              Icon(
+                                Icons.search_rounded,
+                                size: 15,
                                 color: Colors.black,
-                              ),),
+                              ),
+                              Text(
+                                '검색',
+                                style: mediumText(
+                                  size: 11,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(context: context, builder: (context) {
-                            return Container(
-                              width: double.infinity,
-                              height: 350,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 15,),
-                                  Container(
-                                    width: 50,
-                                    height: 6,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(200),
-                                      color: Colors.grey,
-                                    ),
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                width: double.infinity,
+                                height: 350,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
                                   ),
-                                  SizedBox(height: 15,),
-                                  _selectSort(text: '곧 시작해요!'),
-                                  _selectSort(text: '포인트 낮은순'),
-                                  _selectSort(text: '포인트 높은순'),
-                                  _selectSort(text: '목표 시간 적은순'),
-                                  _selectSort(text: '목표 시간 많은순', last: true),
-                                ],
-                              ),
-                            );
-                          },);
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 15),
+                                    Container(
+                                      width: 50,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          200,
+                                        ),
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    SizedBox(height: 15),
+                                    _selectSort(text: '곧 시작해요!'),
+                                    _selectSort(text: '포인트 낮은순'),
+                                    _selectSort(text: '포인트 높은순'),
+                                    _selectSort(text: '목표 시간 적은순'),
+                                    _selectSort(text: '목표 시간 많은순', last: true),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: Row(
                           children: [
-                            Text(challengeProvider.sortToText(), style: TextStyle(
-                              fontSize: 14,
+                            Text(
+                              challengeProvider.sortToText(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              size: 20,
                               color: Colors.black,
-                            ),),
-                            Icon(Icons.arrow_drop_down, size: 20, color: Colors.black,),
+                            ),
                           ],
                         ),
                       ),
@@ -186,9 +203,14 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                   ),
                   SizedBox(height: 20),
                   Column(
-                    children: challengeProvider.challengesData == null || challengeProvider.challenges.isEmpty
+                    children:
+                        challengeProvider.challengesData == null ||
+                            challengeProvider.challenges.isEmpty
                         ? [Text('할 수 있는 챌린지가 없어요')]
-                        : challengeProvider.challenges.map((e) => ChallengeItem(challenge: e)).toList(),),
+                        : challengeProvider.challenges
+                              .map((e) => ChallengeItem(challenge: e))
+                              .toList(),
+                  ),
                 ],
               ),
             ),
@@ -197,7 +219,9 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(CupertinoPageRoute(builder: (context) => AddChallengeScreen(),));
+          Navigator.of(context).push(
+            CupertinoPageRoute(builder: (context) => AddChallengeScreen()),
+          );
         },
         child: Container(
           width: 80,
@@ -210,10 +234,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.add, size: 20, color: Colors.white,),
-              SizedBox(width: 2,),
-              Text('만들기', style: mediumText(size: 12, color: Colors.white),),
-              SizedBox(width: 7,),
+              Icon(Icons.add, size: 20, color: Colors.white),
+              SizedBox(width: 2),
+              Text('만들기', style: mediumText(size: 12, color: Colors.white)),
+              SizedBox(width: 7),
             ],
           ),
         ),
@@ -223,28 +247,38 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
 
   Widget _selectSort({required String text, bool last = false}) {
     return GestureDetector(
-
       onTap: () async {
         final navigator = Navigator.of(context);
+        navigator.pop();
         challengeProvider.resetChallenges();
         challengeProvider.setSort(text);
         await challengeProvider.getChallengesData();
-        navigator.pop();
       },
       child: Container(
         alignment: Alignment.center,
         height: 60,
         width: double.infinity,
         decoration: BoxDecoration(
-            border: last ? null : Border(bottom: BorderSide(width: 1.5, color: Colors.grey.withValues(alpha: 0.5)))
+          border: last
+              ? null
+              : Border(
+                  bottom: BorderSide(
+                    width: 1.5,
+                    color: Colors.grey.withValues(alpha: 0.5),
+                  ),
+                ),
         ),
-        child: Text(text, style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: challengeProvider.sortToText() == text ? pointColor.withValues(alpha: 0.5) : Colors.black,
-        ),),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: challengeProvider.sortToText() == text
+                ? pointColor.withValues(alpha: 0.5)
+                : Colors.black,
+          ),
+        ),
       ),
     );
   }
-
 }

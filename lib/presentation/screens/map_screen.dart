@@ -16,6 +16,8 @@ class _MapScreenState extends State<MapScreen> {
   InAppWebViewController? webViewController;
   StreamSubscription<Position>? positionStream;
 
+  String _searchKeyword = "";
+
   bool isGymSelected = false;
   DateTime? checkinStartTime;
   Timer? _timer;
@@ -133,6 +135,52 @@ class _MapScreenState extends State<MapScreen> {
           : null,
       body: Stack(
         children: [
+          Positioned(
+            top: 50,
+            left: 16,
+            right: 16,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.search, color: Colors.grey),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (val) {
+                        _searchKeyword = val;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "검색어를 입력해주세요",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      if (_searchKeyword.trim().isNotEmpty) {
+                        webViewController?.evaluateJavascript(
+                          source: "searchPlace('${_searchKeyword.trim()}');",
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
           InAppWebView(
             initialUrlRequest: URLRequest(
                 url: WebUri("https://dooit-bf5a9.web.app?version=${DateTime.now().millisecondsSinceEpoch}")

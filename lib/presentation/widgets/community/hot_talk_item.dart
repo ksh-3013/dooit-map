@@ -45,6 +45,8 @@ class HotTalkItem extends StatelessWidget {
                     ),
                     SizedBox(height: 10,),
                     _iconAndData(text: postData.commentCount, icon: Icons.chat),
+                    SizedBox(height: 5,),
+                    _iconAndData(text: postData.reactionCount, icon: Icons.favorite),
                   ],
                 ),
               ),

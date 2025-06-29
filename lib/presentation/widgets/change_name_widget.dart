@@ -32,7 +32,7 @@ class _ChangeNameWidgetState extends State<ChangeNameWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xFFF6EFE9),
       body: SingleChildScrollView(
         child: Padding(
@@ -112,6 +112,6 @@ class _ChangeNameWidgetState extends State<ChangeNameWidget> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

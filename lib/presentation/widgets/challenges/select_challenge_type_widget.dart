@@ -1,6 +1,6 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/presentantion/providers/challenges/add_challenge_provider.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/common/fonts.dart';
+import 'package:dooit/presentation/providers/challenges/add_challenge_provider.dart';
 import 'package:flutter/material.dart';
 
 class SelectChallengeTypeWidget extends StatelessWidget {

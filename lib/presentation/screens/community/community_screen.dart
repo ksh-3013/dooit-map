@@ -1,13 +1,13 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/data/models/post_model.dart';
-import 'package:capstone_project_2/presentantion/providers/community/community_provider.dart';
-import 'package:capstone_project_2/presentantion/screens/search_challenge_screen.dart';
-import 'package:capstone_project_2/presentantion/widgets/communit/hot_talk_item.dart';
-import 'package:capstone_project_2/presentantion/widgets/communit/post_item.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/data/models/post_model.dart';
+import 'package:dooit/presentation/providers/community/community_provider.dart';
+import 'package:dooit/presentation/screens/search_challenge_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/fonts.dart';
+import '../../widgets/community/hot_talk_item.dart';
+import '../../widgets/community/post_item.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -54,7 +54,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (context) => SearchScreen(searchTarget: '커뮤니티'),));
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              SearchScreen(searchTarget: '커뮤니티'),
+                        ),
+                      );
                     },
                     child: Icon(
                       Icons.search_rounded,
@@ -132,18 +137,21 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 scrollDirection: Axis.horizontal,
                 children: [
-                  for(int i = 0; i < 10; i++)
-                    HotTalkItem(postData: PostModel(
+                  for (int i = 0; i < 10; i++)
+                    HotTalkItem(
+                      postData: PostModel(
                         authorId: 13,
                         authorName: '변지우',
                         authorTier: '헬중수',
                         title: '회사가 운동을 방해합니다',
-                        content: '회사 근처 헬스장에서 운동을 하는데 점심시간에 갔다가 온다고 하니까 해봤자 뭐 얼마나 달라진다고 운동하냐며 그 시간에 일이나 더 하립니다',
+                        content:
+                            '회사 근처 헬스장에서 운동을 하는데 점심시간에 갔다가 온다고 하니까 해봤자 뭐 얼마나 달라진다고 운동하냐며 그 시간에 일이나 더 하립니다',
                         commentCount: 12,
                         createdAt: '2025-03-04',
                         id: 43,
-                        updatedAt: null
-                    ),),
+                        updatedAt: null,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -162,64 +170,79 @@ class _CommunityScreenState extends State<CommunityScreen> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
                   Row(
                     children: [
                       GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(context: context, builder: (context) {
-                            return Container(
-                              width: double.infinity,
-                              height: 250,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 15,),
-                                  Container(
-                                    width: 50,
-                                    height: 6,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(200),
-                                      color: Colors.grey,
-                                    ),
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                width: double.infinity,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
                                   ),
-                                  SizedBox(height: 15,),
-                                  _selectSort(text: '최신순'),
-                                  _selectSort(text: '리액션 많은 순'),
-                                  _selectSort(text: '댓글 많은 순', last: true),
-                                ],
-                              ),
-                            );
-                          },);
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 15),
+                                    Container(
+                                      width: 50,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          200,
+                                        ),
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    SizedBox(height: 15),
+                                    _selectSort(text: '최신순'),
+                                    _selectSort(text: '리액션 많은 순'),
+                                    _selectSort(text: '댓글 많은 순', last: true),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: Row(
                           children: [
-                            Text(provider.sortToText(), style: TextStyle(
-                              fontSize: 14,
+                            Text(
+                              provider.sortToText(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              size: 20,
                               color: Colors.black,
-                            ),),
-                            Icon(Icons.arrow_drop_down, size: 20, color: Colors.black,),
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 15,),
-                  for(int i = 0; i < 10; i++)
+                  SizedBox(height: 15),
+                  for (int i = 0; i < 10; i++)
                     PostItem(
                       postData: PostModel(
                         authorId: 13,
                         authorName: '변지우',
                         authorTier: '헬중수',
                         title: '가보입시더',
-                        content: '그래서 제가요 진짜 그랬는데 너무 그래서 너무 그거 해버렸어요 진짜 우짜죠 진짜 진짜로 좀 많이 심각심각한 느낌인데',
+                        content:
+                            '그래서 제가요 진짜 그랬는데 너무 그래서 너무 그거 해버렸어요 진짜 우짜죠 진짜 진짜로 좀 많이 심각심각한 느낌인데',
                         commentCount: 12,
                         createdAt: '2025-03-04',
                         id: 43,
-                        updatedAt: null
+                        updatedAt: null,
                       ),
                     ),
                 ],
@@ -236,9 +259,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
       onTap: () async {
         print(text);
         final navigator = Navigator.of(context);
-        setState(() {
-
-        });
+        setState(() {});
         // challengeProvider.resetChallenges();
         provider.setSort(text);
         // await challengeProvider.getChallengesData();
@@ -249,15 +270,26 @@ class _CommunityScreenState extends State<CommunityScreen> {
         height: 60,
         width: double.infinity,
         decoration: BoxDecoration(
-            border: last ? null : Border(bottom: BorderSide(width: 1.5, color: Colors.grey.withValues(alpha: 0.5)))
+          border: last
+              ? null
+              : Border(
+                  bottom: BorderSide(
+                    width: 1.5,
+                    color: Colors.grey.withValues(alpha: 0.5),
+                  ),
+                ),
         ),
-        child: Text(text, style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: provider.sortToText() == text ? pointColor.withValues(alpha: 0.5) : Colors.black,
-        ),),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: provider.sortToText() == text
+                ? pointColor.withValues(alpha: 0.5)
+                : Colors.black,
+          ),
+        ),
       ),
     );
   }
-
 }

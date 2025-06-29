@@ -1,5 +1,6 @@
-import 'package:capstone_project_2/data/models/post_model.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../data/models/post_model.dart';
 
 class PostProvider extends ChangeNotifier {
   PostModel? postData;

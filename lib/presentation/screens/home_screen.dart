@@ -286,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        formatMinutes(data.weekStat_time ?? 0),
+                        formatMinutes(data.weekStat_time!),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 43,
@@ -295,7 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        getWeeklyExerciseMessage(data.weekStat_time!),
+                        '${getWeeklyExerciseMessage(data.weekStat_time?.toInt() ?? 0)}' ??
+                            '0',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -526,9 +527,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Spacer(),
                     Text(
-                      data.weeklyMaxWorkoutDuration != null
-                          ? formatMinutes(data.weeklyMaxWorkoutDuration!)
-                          : '운동 기록이 없어요',
+                      ('${data.weeklyMaxWorkoutDuration}' ?? '운동 기록이 없어요'),
                       style: TextStyle(
                         color: Colors.grey,
                         fontFamily: 'Pretendard',

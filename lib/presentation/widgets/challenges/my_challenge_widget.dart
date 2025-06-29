@@ -1,5 +1,5 @@
-import 'package:capstone_project_2/presentantion/providers/challenges/my_challenge_provider.dart';
-import 'package:capstone_project_2/presentantion/screens/challenges/detail_challenge_screen.dart';
+import 'package:dooit/presentation/providers/challenges/my_challenge_provider.dart';
+import 'package:dooit/presentation/screens/challenges/detail_challenge_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

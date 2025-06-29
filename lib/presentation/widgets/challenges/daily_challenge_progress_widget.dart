@@ -1,5 +1,5 @@
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/presentantion/providers/challenges/detail_challenge_provider.dart';
+import 'package:dooit/common/fonts.dart';
+import 'package:dooit/presentation/providers/challenges/detail_challenge_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 

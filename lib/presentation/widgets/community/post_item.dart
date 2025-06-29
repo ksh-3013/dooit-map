@@ -1,7 +1,7 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/data/models/post_model.dart';
-import 'package:capstone_project_2/presentantion/screens/community/post_screen.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/common/fonts.dart';
+import 'package:dooit/data/models/post_model.dart';
+import 'package:dooit/presentation/screens/community/post_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,7 @@ class PostItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         Navigator.of(context).push(CupertinoPageRoute(builder: (context) => PostScreen(postId: 13),));
       },

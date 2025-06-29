@@ -1,9 +1,10 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/presentantion/providers/challenges/detail_challenge_provider.dart';
-import 'package:capstone_project_2/presentantion/widgets/challenges/daily_challenge_progress_widget.dart';
-import 'package:capstone_project_2/presentantion/widgets/challenges/total_challenge_progress_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../../common/colors.dart';
+import '../../../common/fonts.dart';
+import '../../providers/challenges/detail_challenge_provider.dart';
+import '../../widgets/challenges/daily_challenge_progress_widget.dart';
+import '../../widgets/challenges/total_challenge_progress_widget.dart';
 
 class DetailChallengeScreen extends StatefulWidget {
   const DetailChallengeScreen({super.key, required this.id});

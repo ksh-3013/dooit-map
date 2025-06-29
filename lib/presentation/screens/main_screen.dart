@@ -1,5 +1,5 @@
-import 'package:dooit/presentation/screens/challenge_screen.dart';
-import 'package:dooit/presentation/screens/community_screen.dart';
+import 'package:dooit/presentation/screens/challenges/challenge_screen.dart';
+import 'package:dooit/presentation/screens/community/community_screen.dart';
 import 'package:dooit/presentation/screens/home_screen.dart';
 import 'package:dooit/presentation/screens/map_screen.dart';
 import 'package:dooit/presentation/screens/my_page_screen.dart';

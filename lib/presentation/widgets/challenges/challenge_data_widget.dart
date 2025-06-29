@@ -1,4 +1,4 @@
-import 'package:capstone_project_2/presentantion/providers/challenges/add_challenge_provider.dart';
+import 'package:dooit/presentation/providers/challenges/add_challenge_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

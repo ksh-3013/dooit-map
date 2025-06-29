@@ -6,14 +6,12 @@ class Data {
   int? totalPoint;
   int? totalExerTime;
 
-  /// 랭킹
   List? challengeSuccessRanks = [];
   List? havePointRanks = [];
   List? monthExerTimeRanks = [];
   List? weekExerTimeRanks = [];
   List? dailyExerTimeRanks = [];
 
-  ///
   int? today;
   int? total;
 

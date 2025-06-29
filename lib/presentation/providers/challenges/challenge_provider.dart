@@ -1,8 +1,7 @@
-import 'package:capstone_project_2/data/models/challenge/challenge_list_model.dart';
-import 'package:capstone_project_2/data/models/challenge/challenge_model.dart';
-import 'package:capstone_project_2/data/models/challenge/view_challenge_model.dart';
-import 'package:capstone_project_2/data/repositories/challenge_repository.dart';
-import 'package:capstone_project_2/data/repositories/user_repository.dart';
+import 'package:dooit/data/models/challenge/challenge_list_model.dart';
+import 'package:dooit/data/models/challenge/view_challenge_model.dart';
+import 'package:dooit/data/repositories/challenge_repository.dart';
+import 'package:dooit/data/repositories/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 
 final ChallengeProvider challengeProvider = ChallengeProvider();

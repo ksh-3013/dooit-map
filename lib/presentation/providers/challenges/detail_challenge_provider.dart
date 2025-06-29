@@ -1,6 +1,6 @@
-import 'package:capstone_project_2/data/models/challenge/challenge_model.dart';
-import 'package:capstone_project_2/data/models/challenge/my_progress_model.dart';
-import 'package:capstone_project_2/data/repositories/challenge_repository.dart';
+import 'package:dooit/data/models/challenge/challenge_model.dart';
+import 'package:dooit/data/models/challenge/my_progress_model.dart';
+import 'package:dooit/data/repositories/challenge_repository.dart';
 import 'package:flutter/cupertino.dart';
 
 class DetailChallengeProvider extends ChangeNotifier {

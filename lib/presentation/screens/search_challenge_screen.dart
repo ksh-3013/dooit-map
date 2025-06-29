@@ -1,7 +1,7 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/presentantion/providers/search_challenge_provider.dart';
-import 'package:capstone_project_2/presentantion/screens/challenges/add_challenge_screen.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/common/fonts.dart';
+import 'package:dooit/presentation/providers/search_challenge_provider.dart';
+import 'package:dooit/presentation/screens/challenges/add_challenge_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

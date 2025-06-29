@@ -1,6 +1,6 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/common/fonts.dart';
-import 'package:capstone_project_2/data/models/challenge/challenge_model.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/common/fonts.dart';
+import 'package:dooit/data/models/challenge/challenge_model.dart';
 import 'package:flutter/material.dart';
 
 class TotalChallengeProgressWidget extends StatelessWidget {

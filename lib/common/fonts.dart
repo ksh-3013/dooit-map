@@ -1,4 +1,4 @@
-import 'package:flutter.material.dart';
+import 'package:flutter/material.dart';
 
 TextStyle blackText({required double size, required Color color}) {
   return TextStyle(
@@ -19,6 +19,16 @@ TextStyle semiBoldText({required double size, required Color color}) {
 }
 
 TextStyle mediumText({required double size, required Color color}) {
+  return TextStyle(
+    fontSize: size,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Pretendard',
+    color: color,
+    // height: 1.2,
+  );
+}
+
+TextStyle regularText({required double size, required Color color}) {
   return TextStyle(
     fontSize: size,
     fontWeight: FontWeight.w500,

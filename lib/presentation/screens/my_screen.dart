@@ -1,11 +1,11 @@
-import 'package:capstone_project_2/common/colors.dart';
-import 'package:capstone_project_2/presentantion/providers/my_provider.dart';
-import 'package:capstone_project_2/presentantion/screens/shop/shop_screen.dart';
-import 'package:capstone_project_2/presentantion/widgets/change_name_widget.dart';
+import 'package:dooit/common/colors.dart';
+import 'package:dooit/presentation/providers/my_provider.dart';
+import 'package:dooit/presentation/widgets/change_name_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/fonts.dart';
+import '../shop/shop_screen.dart';
 
 class MyScreen extends StatefulWidget {
   const MyScreen({super.key});

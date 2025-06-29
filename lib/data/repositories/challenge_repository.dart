@@ -74,12 +74,12 @@ class ChallengeRepository {
       };
 
       final response = await client.post(
-        Uri.parse('${url}/challenges'),
-        body: jsonEncode(body),
+        Uri.parse('${url}/api/challenges'),
         headers: {
           'Authorization': 'Bearer ${tkn}',
           'Content-Type': 'application/json',
         },
+        body: jsonEncode(body),
       );
 
       final jsonBody = await jsonDecode(response.body);
@@ -150,7 +150,7 @@ class ChallengeRepository {
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       tkn = pref.getString('access_token');
-      
+
       final response = await client.get(
         Uri.parse('${url}/challenges/my'),
         headers: {'Authorization': 'Bearer ${tkn}'},

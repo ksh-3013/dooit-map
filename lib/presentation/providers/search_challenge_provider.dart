@@ -1,8 +1,8 @@
-import 'package:capstone_project_2/data/models/post_model.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../data/models/challenge/challenge_list_model.dart';
 import '../../data/models/challenge/view_challenge_model.dart';
+import '../../data/models/post_model.dart';
 import '../../data/repositories/challenge_repository.dart';
 
 class SearchChallengeProvider extends ChangeNotifier {

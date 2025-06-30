@@ -60,8 +60,7 @@ class AuthRepository {
       if (response.statusCode == 200) {
         print('✅ 서버에 토큰 전송 성공: ${response.body}');
         final responseData = jsonDecode(response.body);
-        pref.setString('access_token', responseData['data']['access_token']);
-        pref.setString('refresh_token', responseData['data']['refresh_token']);
+
         userRepository.userInfo();
         await userRepository.getRank();
         await userRepository.getTime();

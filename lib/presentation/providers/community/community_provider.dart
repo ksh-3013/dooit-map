@@ -25,7 +25,7 @@ class CommunityProvider extends ChangeNotifier {
   void addList() {
     scrollController.addListener(() async {
       if (scrollController.position.pixels >
-              scrollController.position.maxScrollExtent - 300 &&
+          scrollController.position.maxScrollExtent - 300 &&
           posts.isNotEmpty) {
         page += 1;
         await getPosts();
@@ -40,9 +40,9 @@ class CommunityProvider extends ChangeNotifier {
 
   String sortToText() {
     switch (sort) {
-      case 'like':
+      case 'REACTION':
         return '리액션 많은 순';
-      case 'comment':
+      case 'COMMENTS':
         return '댓글 많은 순';
       default:
         return '최신순';
@@ -52,9 +52,9 @@ class CommunityProvider extends ChangeNotifier {
   String textToSort(String typeText) {
     switch (typeText) {
       case '리액션 많은 순':
-        return 'like';
+        return 'REACTION';
       case '댓글 많은 순':
-        return 'comment';
+        return 'COMMENTS';
       default:
         return '';
     }
@@ -62,11 +62,12 @@ class CommunityProvider extends ChangeNotifier {
 
   Future<void> getPosts() async {
     posts = await communityRepository.getPosts('', page, 10, sort);
-    if (posts.isNotEmpty) {
+    if(posts.isNotEmpty) {
       allPosts.addAll(posts);
     }
     print(posts);
     print('한글${allPosts}');
     notifyListeners();
   }
+
 }

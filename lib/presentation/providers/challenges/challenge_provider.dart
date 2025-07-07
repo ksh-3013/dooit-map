@@ -8,7 +8,6 @@ final ChallengeProvider challengeProvider = ChallengeProvider();
 
 class ChallengeProvider extends ChangeNotifier {
   final ChallengeRepository challengeRepository = ChallengeRepository();
-  final UserRepository userRepository = UserRepository();
   final ScrollController scrollController = ScrollController();
   ChallengeListModel? challengesData;
   List<ViewChallengeModel> challenges = [];

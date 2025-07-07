@@ -1,365 +1,84 @@
-import 'package:dooit/common/colors.dart';
-import 'package:dooit/presentation/providers/my_provider.dart';
-import 'package:dooit/presentation/widgets/change_name_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/fonts.dart';
-import '../shop/shop_screen.dart';
+import '../../data/models/user_model.dart';
+import '../../data/repositories/user_repository.dart';
 
-class MyScreen extends StatefulWidget {
-  const MyScreen({super.key});
+/// 전역 인스턴스 대신 ProviderScope/Riverpod 등을 쓰면 좋지만,
+/// 현 구조 유지 차원에서 싱글턴으로 노출합니다.
+final myProvider = MyProvider();
 
-  @override
-  State<MyScreen> createState() => _MyScreenState();
-}
+class MyProvider extends ChangeNotifier {
+  // -------------------------------------------------------------------------
+  // Dependencies
+  // -------------------------------------------------------------------------
+  final UserRepository _userRepository = userRepository;
 
-class _MyScreenState extends State<MyScreen> {
-  void updateScreen() => setState(() {});
+  // -------------------------------------------------------------------------
+  // 상태 값
+  // -------------------------------------------------------------------------
+  UserModel? _user; // null: 아직 로드 안 됨
+  String _nameError = '유저 이름은 2자 이상 20자 이하여야 합니다.';
+  final TextEditingController nameController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      myProvider.addListener(updateScreen);
-      await myProvider.getMyData();
-      myProvider.setTime();
-    });
+  // 시간 계산용 getter (분 단위 저장이므로 60으로 계산)
+  int get hour => (_user?.totalExerTime ?? 0) ~/ 60;
+
+  int get minutes => (_user?.totalExerTime ?? 0) % 60;
+
+  // 외부에서 읽기용 getter --------------------------------------------------
+  UserModel? get userData => _user;
+
+  String get nameError => _nameError;
+
+  bool get isLoaded => _user != null;
+
+  // -------------------------------------------------------------------------
+  // API 호출
+  // -------------------------------------------------------------------------
+  Future<void> fetchMyData() async {
+    _user = await _userRepository.getMyData();
+    notifyListeners();
   }
 
-  @override
-  void dispose() {
-    myProvider.removeListener(updateScreen);
-    super.dispose();
-  }
+  Future<void> changeName() async {
+    if (nameController.text.trim().length < 2 ||
+        nameController.text.trim().length > 20) {
+      _nameError = '유저 이름은 2자 이상 20자 이하여야 합니다.';
+      notifyListeners();
+      return;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF6EFE9),
-      // backgroundColor: Colors.white,
-      body:
-          myProvider.userData == null
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    Text('내 정보를 불러오는 중 입니다.'),
-                  ],
-                ),
-              )
-              : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // 상단
-                    Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Row(
-                        children: [
-                          Text(
-                            'MY Dooit',
-                            style: blackText(size: 30, color: Colors.black),
-                          ),
-                          Spacer(),
-                          Icon(
-                            Icons.settings,
-                            size: 30,
-                            color: Color(0xFFA6A6A6),
-                          ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.notifications,
-                            color: Color(0xFFA6A6A6),
-                            size: 30,
-                          ),
-                        ],
-                      ),
-                    ),
-                    // 사용자 정보
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: MediaQuery.sizeOf(context).width * 0.8,
-                            child: Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                Image.asset(
-                                  'assets/images/profile_image.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                // Padding(
-                                //   padding: EdgeInsets.all(10),
-                                //   child: GestureDetector(
-                                //     onTap: () {},
-                                //     child: Container(
-                                //       width: 30,
-                                //       height: 30,
-                                //       decoration: BoxDecoration(
-                                //         shape: BoxShape.circle,
-                                //         color: Colors.black,
-                                //       ),
-                                //       child: Icon(
-                                //         Icons.arrow_forward,
-                                //         size: 20,
-                                //         color: Colors.white,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // )
-                              ],
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // 티어
-                              Row(
-                                children: [
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(200),
-                                      color: litePointColor,
-                                    ),
-                                    child: Text(
-                                      myProvider.userData!.tier,
-                                      style: semiBoldText(
-                                        size: 14,
-                                        color: pointColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              // 이름
-                              Row(
-                                children: [
-                                  SizedBox(width: 20,),
-                                  Text(
-                                    myProvider.userData!.name,
-                                    style: semiBoldText(
-                                      size: 28,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        CupertinoPageRoute(
-                                          builder:
-                                              (context) => ChangeNameWidget(userName: myProvider.userData!.name,),
-                                        ),
-                                      ).then((value) async {
-                                        await myProvider.getMyData();
-                                      },);
-                                    },
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 20,
-                                      color: greyColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              // 포인트
-                              Row(
-                                children: [
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                    ),
-                                    height: 35,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(200),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/star.png',
-                                          width: 25,
-                                        ),
-                                        SizedBox(width: 2),
-                                        Text(
-                                          '${myProvider.userData!.totalPoint}',
-                                          style: semiBoldText(
-                                            size: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          ' 개',
-                                          style: semiBoldText(
-                                            size: 16,
-                                            color: Color(0xFFA6A6A6),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
-
-                    // 배너
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      width: double.infinity,
-                      height: 92,
-                      color: Color(0xFFFFD452),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 15),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(200),
-                                  color: Color(0xFF8BC6C1),
-                                ),
-                                child: Text(
-                                  'CUIDE',
-                                  style: semiBoldText(
-                                    size: 10,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10,),
-                              Text(
-                                '운동 타이머 헬스장에서 함께!',
-                                style: semiBoldText(size: 24, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Container(width: 60, height: 60, color: Colors.blue),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        children: [
-                          // 총 운동 시간
-                          Container(
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time_filled_outlined,
-                                  size: 40,
-                                  color: litePointColor,
-                                ),
-                                SizedBox(width: 20),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '지금까지 총',
-                                      style: mediumText(
-                                        size: 14,
-                                        color: greyColor,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '${myProvider.hour! == 0 ? '' : myProvider.hour!}${myProvider.hour! == 0 ? '' : '시간'} ${myProvider.minutes! != 0 ? myProvider.minutes! : ''}${myProvider.minutes! != 0 ? '분' : ''}',
-                                      style: semiBoldText(
-                                        size: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '동안 운동 했어요',
-                                      style: mediumText(
-                                        size: 14,
-                                        color: greyColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          // 선택 항목
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => ShopScreen(),)).then((value) async {
-                                await myProvider.getMyData();
-                              },);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: litePointColor,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.shopping_cart,
-                                    size: 30,
-                                    color: pointColor,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    '상품 구매',
-                                    style: semiBoldText(
-                                      size: 16,
-                                      color: pointColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 40,),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    _nameError = await _userRepository.changeUserName(
+      nameController.text.trim(),
     );
+    await fetchMyData(); // 이름 변경 후 내 정보 갱신
   }
+
+  // -------------------------------------------------------------------------
+  // My Activity List (static)
+  // -------------------------------------------------------------------------
+  List<Map<String, dynamic>> get myActivity => _myActivity;
+
+  final List<Map<String, dynamic>> _myActivity = [
+    {
+      'icon': Icons.edit,
+      'text': '내가 쓴 리뷰',
+      'action': () => debugPrint('내가 쓴 리뷰'),
+    },
+    {
+      'icon': Icons.chat_outlined,
+      'text': '두잇 토크 활동',
+      'action': () => debugPrint('두잇 토크 활동'),
+    },
+    {
+      'icon': Icons.credit_card,
+      'text': '결제 내역',
+      'action': () => debugPrint('결제 내역'),
+    },
+    {
+      'icon': Icons.favorite_outline,
+      'text': '관심 헬스장',
+      'action': () => debugPrint('관심 헬스장'),
+    },
+  ];
 }

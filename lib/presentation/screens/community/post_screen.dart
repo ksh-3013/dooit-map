@@ -33,17 +33,17 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(child: Scaffold(
       body: provider.postData == null
           ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Text('게시글을 불러오는 중 입니다.'),
-              ],
-            ),
-          )
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            Text('게시글을 불러오는 중 입니다.'),
+          ],
+        ),
+      )
           : SingleChildScrollView(
         child: Column(
           children: [
@@ -138,6 +138,6 @@ class _PostScreenState extends State<PostScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
